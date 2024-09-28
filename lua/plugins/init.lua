@@ -11,6 +11,29 @@ return {
   -- These are some examples, uncomment them if you want to see them work!
 
   {
+    "mfussenegger/nvim-jdtls",
+  },
+  {
+    "kdheepak/lazygit.nvim",
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    -- setting the keybinding for LazyGit with 'keys' is recommended in
+    -- order to load the plugin when the command is run for the first time
+    keys = {
+      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
+  },
+
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require("nvchad.configs.lspconfig").defaults()
@@ -52,8 +75,15 @@ return {
         on_attach = on_attach,
         flags = lsp_flags,
       }
+
+      lspconfig.jdtls.setup {
+        on_attach = on_attach,
+        flags = lsp_flags,
+      }
     end,
   },
+  --
+  { "nvim-java/nvim-java" },
   --
   {
     "williamboman/mason.nvim",
@@ -67,6 +97,7 @@ return {
         "tailwindcss-language-server",
         "typescript-language-server",
         "gopls",
+        "java-language-server",
         "eslint-lsp",
       },
     },
@@ -89,6 +120,7 @@ return {
         "go",
         "gomod",
         "gosum",
+        "java",
         "proto",
         "scss",
         "yaml",
@@ -117,78 +149,11 @@ return {
           null_ls.builtins.formatting.eslint_d, -- ESLint for formatting
           null_ls.builtins.code_actions.eslint_d, -- ESLint for code actions
           null_ls.builtins.formatting.deno,
+          null_ls.builtins.formatting.google_java_format, -- Google Java Formatter
         },
       }
 
       vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
-    end,
-  },
-  --
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    config = function()
-      require("catppuccin").setup {
-        term_colors = true,
-        styles = {
-          comments = "italic",
-          conditionals = "italic",
-          loops = "italic",
-          functions = "italic",
-          keywords = "italic",
-          strings = "NONE",
-          variables = "NONE",
-          numbers = "NONE",
-          booleans = "NONE",
-          properties = "NONE",
-          tyoes = "NONE",
-          operators = "NONE",
-        },
-        integrations = {
-          treesitter = true,
-          native_lsp = {
-            enabled = true,
-            virtual_text = {
-              errors = "italic",
-              hints = "italic",
-              warnings = "italic",
-              information = "italic",
-            },
-            underlines = {
-              errors = "italic",
-              hints = "italic",
-              warnings = "italic",
-              information = "italic",
-            },
-          },
-          lsp_trouble = true,
-          cmp = true,
-          lsp_saga = true,
-          gitgutter = true,
-          gitsigns = true,
-          telescope = true,
-          nvimtree = {
-            enabled = true,
-            show_root = true,
-            transparent_panel = true,
-          },
-          indent_blankline = {
-            enabled = true,
-            colored_indent_levels = false,
-          },
-          dashborad = true,
-          bufferline = true,
-          markdown = true,
-          lightspeed = true,
-          ts_rainbow = true,
-          hop = true,
-          notify = true,
-          telekasten = true,
-          symbols_outline = true,
-        },
-      }
-
-      vim.cmd "colorscheme catppuccin"
     end,
   },
   --
@@ -634,5 +599,23 @@ return {
     config = function()
       require("ts-error-translator").setup()
     end,
+  },
+
+  {
+    "Equilibris/nx.nvim",
+
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+
+    opts = {
+      -- See below for config options
+      nx_cmd_root = "npx nx",
+    },
+
+    -- Plugin will load when you use these keys
+    keys = {
+      { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
+    },
   },
 }
